@@ -1,0 +1,30 @@
+version: "3" 
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: verysafepassword # Change This
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: niceuser # Change This
+      MYSQL_PASSWORD: verysafepassword # Change this
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    restart: always
+    ports:
+      - "11000:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: niceuser
+      WORDPRESS_DB_PASSWORD: verysafepassword # Change This
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./wordpress:/var/www/html
+
+volumes:
+  mysql_data: {}
